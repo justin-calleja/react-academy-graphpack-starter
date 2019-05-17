@@ -1,49 +1,41 @@
-import data from "./data.js";
+import data from "./data";
 
 const resolvers = {
   Query: {
-    // articles: () => data.articles,
-    articles: (parent, { search }) =>
-      search
-        ? data.articles.filter(article => article.title.includes(search))
-        : data.articles,
-    users: (_parent, { limit }) => {
-      if (limit && limit > 0) {
-        let res = [];
-        for (let i = 0; i < limit; i++) {
-          res.push(data.users[i]);
-        }
-        return res;
+    hello: () => "Hello World!! 👋",
+    articles: (parent, { search }) => {
+      if (search) {
+        const { text = "", tags = [] } = search;
+
+        return data.articles.filter(article => {
+          const includesSearch = article.title
+            .toLowerCase()
+            .includes(text.toLowerCase());
+
+          const hasCorrectTags = tags.every(tag =>
+            article.tags.some(articleTag => articleTag === tag)
+          );
+
+          return includesSearch && hasCorrectTags;
+        });
       }
-      return data.users;
+      return data.articles;
     },
-    greeting: (_parent, { name }) => (name ? `Hello ${name}` : "Hello world"),
-    sum: (_parent, { numbers = [] } = {}) => {
-      if (numbers && numbers.length > 0) {
-        return numbers.reduce((acc, val) => {
-          return acc + val;
-        }, 0);
-      }
-      return 0;
-    }
+    users: (parent, { limit }) =>
+      limit ? data.users.slice(0, limit) : data.users,
+    greeting: (parent, { name }) => `Hello ${name || "World"}`,
+    sum: (parent, { numbers }) =>
+      numbers.reduce((accum, num) => (accum += num), 0)
   },
   User: {
-    articles: parent => {
-      console.log("in here:", parent);
-
-      return data.articles.filter(article => article.id === parent.id);
+    articles: parent =>
+      data.articles.filter(article => article.id === parent.id)
+  },
+  Article: {
+    author: parent => data.users.find(user => user.id === parent.author),
+    tags: parent => {
+      return data.tags.filter(tag => parent.tags.includes(tag.id))
     }
-
-    // articles: (parent, arg) => {
-    //   console.log("parent:", parent);
-    //   console.log("arg:", arg);
-    //   return {
-    //     id: 1,
-    //     name: "Kristijan",
-    //     email: "becky@gmail.com",
-    //     articleIds: ["1"]
-    //   };
-    // }
   }
 };
 

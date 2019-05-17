@@ -1,34 +1,32 @@
 type Query {
-  articles: [Article!]!
+  hello: String
+  articles(search: SearchInput): [Article!]!
   users(limit: Int): [User!]!
   greeting(name: String): String
-  sum(numbers: [Float]): Float
+  sum(numbers: [Float!]!): Float
 }
 
-# type Article {
-#   id: ID!
-#   title: String
-#   body: String
-#   author: User
-# }
-
-# type User {
-#   id: ID!
-#   name: String
-#   email: String
-#   articles: [String]
-# }
+type Tag {
+  id: ID
+  name: String
+}
 
 type Article {
   id: ID
   title: String
   body: String
   author: User!
+  tags: [Tag]
 }
 
 type User {
   id: ID
   name: String
   email: String
-  articles: [Article!]!
+  articles(search: SearchInput): [Article!]!
+}
+
+input SearchInput {
+  text: String
+  tags: [Int]
 }
