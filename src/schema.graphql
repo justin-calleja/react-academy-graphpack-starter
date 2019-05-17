@@ -1,6 +1,6 @@
 type Query {
   articles: [Article!]!
-  users: [User!]!
+  users(limit: Int): [User!]!
   greeting(name: String): String
   sum(numbers: [Float]): Float
 }
