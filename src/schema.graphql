@@ -1,6 +1,7 @@
 type Query {
-  articles: [Article]
-  users: [User]
+  articles: [Article!]!
+  users: [User!]!
+  greeting(name: String): String
 }
 
 type Article {
