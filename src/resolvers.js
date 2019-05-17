@@ -1,17 +1,21 @@
-import data from "./data.json";
+import data from "./data.js";
 
 const resolvers = {
   Query: {
-    articles: () => data.articles,
+    // articles: () => data.articles,
+    articles: (parent, { search }) =>
+      search
+        ? data.articles.filter(article => article.title.includes(search))
+        : data.articles,
     users: (_parent, { limit }) => {
       if (limit && limit > 0) {
-        let res = []
+        let res = [];
         for (let i = 0; i < limit; i++) {
-          res.push(data.users[i])
+          res.push(data.users[i]);
         }
-        return res
+        return res;
       }
-      return data.users
+      return data.users;
     },
     greeting: (_parent, { name }) => (name ? `Hello ${name}` : "Hello world"),
     sum: (_parent, { numbers = [] } = {}) => {
@@ -22,6 +26,24 @@ const resolvers = {
       }
       return 0;
     }
+  },
+  User: {
+    articles: parent => {
+      console.log("in here:", parent);
+
+      return data.articles.filter(article => article.id === parent.id);
+    }
+
+    // articles: (parent, arg) => {
+    //   console.log("parent:", parent);
+    //   console.log("arg:", arg);
+    //   return {
+    //     id: 1,
+    //     name: "Kristijan",
+    //     email: "becky@gmail.com",
+    //     articleIds: ["1"]
+    //   };
+    // }
   }
 };
 

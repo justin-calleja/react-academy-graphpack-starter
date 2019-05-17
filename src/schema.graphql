@@ -5,16 +5,30 @@ type Query {
   sum(numbers: [Float]): Float
 }
 
+# type Article {
+#   id: ID!
+#   title: String
+#   body: String
+#   author: User
+# }
+
+# type User {
+#   id: ID!
+#   name: String
+#   email: String
+#   articles: [String]
+# }
+
 type Article {
-  id: ID!
+  id: ID
   title: String
   body: String
-  author: String
+  author: User!
 }
 
 type User {
-  id: ID!
+  id: ID
   name: String
   email: String
-  articles: [String]
+  articles: [Article!]!
 }
