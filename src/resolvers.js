@@ -1,6 +1,9 @@
+import data from './data.json'
+
 const resolvers = {
   Query: {
-    hello: () => `Hello World!`
+    articles: () => data.articles,
+    users: () => data.users
   }
 };
 
