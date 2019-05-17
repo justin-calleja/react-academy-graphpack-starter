@@ -2,6 +2,7 @@ type Query {
   articles: [Article!]!
   users: [User!]!
   greeting(name: String): String
+  sum(numbers: [Float]): Float
 }
 
 type Article {
